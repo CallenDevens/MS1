@@ -186,26 +186,44 @@ public class StatisticsNode {
 
 	public String toString(){
 		if(!keyword.equals("")){
-		String result = keyword + ":\n" ;
-		result+="lemmas:";
-		for (Map.Entry<String, Integer> entry: this.lemmas.entrySet()){
-			result += "("+entry.getKey() + ":" + entry.getValue() +"),";
-		}
-		result += "\nDefs:";
-		for (Map.Entry<String, Integer> entry: this.definitions.entrySet()){
-			result += "("+entry.getKey() + ":" + entry.getValue() +"),";
-		}
+			String result = keyword + "\n" ;
 		
-		result += "\nTactics:";
-		for (Map.Entry<String, Integer> entry: this.tactics.entrySet()){
-			result += "("+entry.getKey() + ":" + entry.getValue() +"),";
-		}
-		result += "\nUsedin";
-		for (Map.Entry<String, Integer> entry: this.usedin.entrySet()){
-			result += "("+entry.getKey() + ":" + entry.getValue() +"),";
-		}
-		result += "\n";
-		return result;
+			if(this.lemmas.isEmpty()){
+				result += "null";
+			}
+			else{
+				for (Map.Entry<String, Integer> entry: this.lemmas.entrySet()){
+					result += entry.getKey() + ":" + entry.getValue() +"|";
+				}
+			}
+			result += "\n";
+			if(this.definitions.isEmpty()){
+				result += "null";				
+			}else{
+				for (Map.Entry<String, Integer> entry: this.definitions.entrySet()){
+					result += entry.getKey() + ":" + entry.getValue() +"|";
+				}
+			}
+			result += "\n";
+			if(this.tactics.isEmpty()){
+				result += "null";
+			}
+			else{
+				for (Map.Entry<String, Integer> entry: this.tactics.entrySet()){
+					result += entry.getKey() + ":" + entry.getValue() +"|";
+				}
+			}
+			
+			result += "\n";
+			if(this.usedin.isEmpty()){
+				result += "null";
+			}else{
+				for (Map.Entry<String, Integer> entry: this.usedin.entrySet()){
+					result += entry.getKey() + ":" + entry.getValue() +"|";
+				}
+			}
+			result += "\nend";
+			return result;
 		}
 		else{
 			return "";
@@ -222,6 +240,14 @@ public class StatisticsNode {
 
 	public Map<String, Integer> getLemmas() {
 		return this.lemmas;
+	}
+	
+	public Map<String, Integer> getDefinition() {
+		return this.definitions;
+	}
+	
+	public Map<String, Integer> getUsedin() {
+		return this.usedin;
 	}
 
 	public void addUsedIn(String kw) {

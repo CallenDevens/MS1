@@ -65,7 +65,7 @@ public class FileProcessor {
 			    	Matcher indexMacther = lemmaStartPattern.matcher(line);
 		    	    	if(indexMacther.find()){
 		    	    		this.addStatisticsNode(sNode);
-		    	    		String keyword = line.substring(indexMacther.end(), line.length()).trim().replaceAll(":", "");
+		    	    		String keyword = line.substring(indexMacther.end(), line.indexOf(":")).trim().replaceAll(":", "");
 		    	    		sNode = new StatisticsNode(keyword, StatisticsNode.TYPE_LEMMA, this.fileName);
 			    	}
 			    }
@@ -100,6 +100,7 @@ public class FileProcessor {
 		if(sNode == null){
 			return;
 		}
+		line = line.replaceAll("\".*?\"", "");
 		String [] proofs = line.split("\\(|\\)|\\s+");
 		for(int i=0; i < proofs.length; i++){
 			//System.out.print(proof[i]+",");

@@ -25,7 +25,6 @@ public class AnalysisSystem {
 	private final static String RELATIVE_FILE_PATH = "/Users/aya/Documents/workspace/MS1/thy/";
 	
 	private ArrayList<String> filelist = new ArrayList<String>();
-	
 	private Map<String, StatisticsNode> statistics = new LinkedHashMap<String, StatisticsNode>();
 
 	public void constructGraph(){
@@ -86,37 +85,51 @@ public class AnalysisSystem {
 	
 	public static void main(String [] args){
 		AnalysisSystem as = new AnalysisSystem();
+		as.deleteOlderResult();
 		File path = new File(RELATIVE_FILE_PATH);
 	    File [] files = path.listFiles();
 	    for (int i = 0; i < files.length; i++){
-	        if (files[i].isFile() && files[i].getName().endsWith(".thy")){ //this line weeds out other directories/folders
-//	    		System.out.println(files[i].getName());
+	        if (files[i].isFile() && files[i].getName().endsWith(".thy")){ 
 	        	as.analyseFile(files[i].getName().replace(".thy", "").trim());
 	        }
 	    }
 		as.reCheck();
 		as.analyzeUsedIn();
-		//as.print();
 		as.saveStatistics();
+		
+		FileFrameAnalyser ffa = new FileFrameAnalyser();
+		ffa.analyseFilesStructure();
+		ffa.saveFileStructure();
 	}
 	
-    private void saveStatistics() {
+    private void deleteOlderResult() {
+    	File path = new File(RELATIVE_FILE_PATH);
+	    File [] files = path.listFiles();
+	    for (int i = 0; i < files.length; i++){
+	        if (files[i].isFile() && files[i].getName().endsWith(".anl")){ 
+	        	files[i].delete();
+	        }
+	    }		
+	}
+
+	private void saveStatistics() {
     	System.out.println("Write statistics to files.....");
     	PrintWriter writer;
     	for(Map.Entry<String, StatisticsNode> entry :this.statistics.entrySet()){
 			try {
 				String outputFileName = entry.getValue().getFileName()+ ".anl";
-		    	System.out.print("Write to "+outputFileName+".....");
 				writer = new PrintWriter(new FileOutputStream(new File(outputFileName),true));
 				writer.println(entry.getValue());
 		    	writer.close();
-		    	System.out.println("finish!");
 
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+    	System.out.println("finish!");
+    	
+		ExcelWriter.getInstance().writeLemmaStructure(statistics);
 	}
 
 	private void reCheck(){

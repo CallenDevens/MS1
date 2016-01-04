@@ -1,3 +1,15 @@
 only
 add
 proof
+rule
+rule_tac
+erule_tac
+drule_tac
+frule_tac
+cut_tac
+thin_tac
+subgoal_tac
+rename_tac
+rotate_tac
+tactic
+raw_tactic
